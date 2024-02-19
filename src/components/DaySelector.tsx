@@ -165,7 +165,7 @@ const DaySelector = () => {
     (date: string) => {
       const newDate = getDate(date).hour(hour).minute(minute);
 
-      onSelectDate(getFormated(newDate));
+      onSelectDate(newDate);
     },
     [onSelectDate, hour, minute]
   );

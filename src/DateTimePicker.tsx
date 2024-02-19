@@ -25,6 +25,7 @@ import dayjs from 'dayjs';
 import localeData from 'dayjs/plugin/localeData';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
+import { Dayjs } from 'dayjs';
 
 dayjs.extend(localeData);
 dayjs.extend(relativeTime);
@@ -182,7 +183,7 @@ const DateTimePicker = (
   }, []);
 
   const onSelectDate = useCallback(
-    (date: DateType) => {
+    (date: Dayjs) => {
       if (onChange) {
         if (mode === 'single') {
           const newDate = timePicker ? date : getStartOfDay(date);
@@ -193,7 +194,7 @@ const DateTimePicker = (
           });
 
           (onChange as SingleChange)({
-            date: newDate.toUTCString(),
+            date: newDate.toDate(),
           });
         } else if (mode === 'range') {
           const sd = state.startDate;

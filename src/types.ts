@@ -63,16 +63,13 @@ export interface IDayObject {
   rightCrop: boolean;
 }
 
-export type SingleChange = (params: { date: DateType }) => void;
+export type SingleChange = (params: { date: Date }) => void;
 
-export type RangeChange = (params: {
-  startDate: DateType;
-  endDate: DateType;
-}) => any;
+export type RangeChange = (params: { startDate: Date; endDate: Date }) => any;
 
 export type MultiChange = (params: {
-  dates: DateType[];
-  datePressed: DateType;
+  dates: Date[];
+  datePressed: Date;
   change: 'added' | 'removed';
 }) => any;
 

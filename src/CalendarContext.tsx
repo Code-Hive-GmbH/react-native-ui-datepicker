@@ -5,6 +5,7 @@ import type {
   DatePickerBaseProps,
   CalendarThemeProps,
 } from './types';
+import { Dayjs } from 'dayjs';
 
 export interface CalendarContextType extends DatePickerBaseProps {
   locale: string | ILocale;
@@ -15,7 +16,7 @@ export interface CalendarContextType extends DatePickerBaseProps {
   currentDate: DateType; // used for latest state of calendar based on Month and Year
   currentYear: number;
   setCalendarView: (value: CalendarViews) => void;
-  onSelectDate: (date: DateType) => void;
+  onSelectDate: (date: Dayjs) => void;
   onSelectMonth: (month: number) => void;
   onSelectYear: (year: number) => void;
   onChangeMonth: (value: number) => void;

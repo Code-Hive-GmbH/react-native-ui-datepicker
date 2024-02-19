@@ -35,7 +35,7 @@ export interface DatePickerSingleProps
     HeaderProps,
     DatePickerBaseProps {
   mode: 'single';
-  date?: DateType;
+  date?: string;
   onChange?: SingleChange;
 }
 
@@ -193,7 +193,7 @@ const DateTimePicker = (
           });
 
           (onChange as SingleChange)({
-            date: newDate,
+            date: newDate.toUTCString(),
           });
         } else if (mode === 'range') {
           const sd = state.startDate;

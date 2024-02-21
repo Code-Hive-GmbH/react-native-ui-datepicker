@@ -78,8 +78,12 @@ const DateTimePicker = (
     endDate,
     dates,
     onChange,
+    initialView = 'day',
     ...rest
   } = props;
+
+  const initialCalendarView: CalendarViews =
+    mode !== 'single' && initialView === 'time' ? 'day' : initialView;
 
   const firstDay =
     firstDayOfWeek && firstDayOfWeek > 0 && firstDayOfWeek <= 6
@@ -149,7 +153,7 @@ const DateTimePicker = (
       startDate,
       endDate,
       dates,
-      calendarView: CalendarViews.day,
+      calendarView: initialCalendarView,
       currentDate,
       currentYear,
     }
@@ -157,11 +161,9 @@ const DateTimePicker = (
 
   useEffect(() => {
     if (mode === 'single') {
-      const newDate = date && (timePicker ? date : getStartOfDay(date));
-
       dispatch({
         type: CalendarActionKind.CHANGE_SELECTED_DATE,
-        payload: { date: newDate },
+        payload: { date },
       });
     } else if (mode === 'range') {
       dispatch({
@@ -181,10 +183,12 @@ const DateTimePicker = (
   }, []);
 
   const onSelectDate = useCallback(
-    (date: DateType) => {
+    (selectedDate: string) => {
       if (onChange) {
         if (mode === 'single') {
-          const newDate = timePicker ? date : getStartOfDay(date);
+          const newDate = timePicker
+            ? selectedDate
+            : (selectedDate.split(' ')[0] as string);
 
           dispatch({
             type: CalendarActionKind.CHANGE_CURRENT_DATE,
@@ -199,17 +203,17 @@ const DateTimePicker = (
           const ed = state.endDate;
           let isStart: boolean = true;
 
-          if (sd && !ed && dateToUnix(date) >= dateToUnix(sd!)) {
+          if (sd && !ed && dateToUnix(selectedDate) >= dateToUnix(sd!)) {
             isStart = false;
           }
 
           (onChange as RangeChange)({
-            startDate: isStart ? getStartOfDay(date) : sd,
-            endDate: !isStart ? getEndOfDay(date) : undefined,
+            startDate: isStart ? getStartOfDay(selectedDate) : sd,
+            endDate: !isStart ? getEndOfDay(selectedDate) : undefined,
           });
         } else if (mode === 'multiple') {
           const safeDates = (state.dates as DateType[]) || [];
-          const newDate = getStartOfDay(date);
+          const newDate = getStartOfDay(selectedDate);
 
           const exists = safeDates.some((ed) => areDatesOnSameDay(ed, newDate));
 
@@ -239,7 +243,7 @@ const DateTimePicker = (
       });
       dispatch({
         type: CalendarActionKind.SET_CALENDAR_VIEW,
-        payload: CalendarViews.day,
+        payload: 'day',
       });
     },
     [state.currentDate]
@@ -254,7 +258,7 @@ const DateTimePicker = (
       });
       dispatch({
         type: CalendarActionKind.SET_CALENDAR_VIEW,
-        payload: CalendarViews.day,
+        payload: 'day',
       });
     },
     [state.currentDate]
